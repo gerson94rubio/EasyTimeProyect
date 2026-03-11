@@ -1,0 +1,37 @@
+/* --- ESTILO PARA LA PANTALLA (Lo que ves en el navegador) --- */
+.btn-print {
+    background-color: #28a745; /* Verde éxito */
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin: 20px 0;
+    font-size: 16px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn-print:hover {
+    background-color: #218838;
+}
+
+/* --- REGLA MÁGICA PARA LA IMPRESIÓN --- */
+@media print {
+    .no-print {
+        display: none !important; /* El botón y el texto rojo no saldrán en el PDF */
+    }
+    
+    body {
+        padding: 0;
+        background-color: white;
+    }
+}
+
+@media print {
+    .salto-pagina {
+        display: block;
+        page-break-before: always; /* Para navegadores antiguos */
+        break-before: page;        /* Estándar moderno */
+    }
+}
