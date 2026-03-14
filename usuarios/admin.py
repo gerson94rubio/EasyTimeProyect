@@ -9,6 +9,8 @@ class CustomUserAdmin(UserAdmin):
     list_display = ('id','first_name','last_name','identificacion','tipo_documento','telefono','username', 'email', 'rol', 'is_active', 'is_staff')
     search_fields = ('id','first_name','last_name','identificacion','tipo_documento','telefono','username', 'email', 'rol',)
     list_filter = ('rol', 'tipo_documento', 'is_active')
+
+    list_per_page = 10
     
     # Nota: He unido los fieldsets para que no se repitan
     fieldsets = UserAdmin.fieldsets + (

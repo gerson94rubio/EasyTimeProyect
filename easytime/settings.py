@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'usuarios',
+    'inventario',
+    'agendamiento',
+    'pqrs',
 ]
 
 MIDDLEWARE = [
@@ -115,3 +118,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'usuarios.User'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+LOGIN_REDIRECT_URL = 'home'
+LOGOUT_REDIRECT_URL = 'home'
+
+# La sesión expira cuando el usuario cierra el navegador
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Tiempo de vida de la sesión en segundos (ejemplo: 30 minutos de inactividad)
+SESSION_COOKIE_AGE = 1800 
+
+# Para que la sesión se actualice en cada solicitud y no expire mientras se usa
+SESSION_SAVE_EVERY_REQUEST = True

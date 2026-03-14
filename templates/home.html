@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="p-5 mb-4 bg-light rounded-3 border">
+    <div class="container-fluid py-5">
+        <h1 class="display-5 fw-bold text-success">Bienvenido a EasyTime</h1>
+        <p class="col-md-8 fs-4">La solución integral para el agendamiento y gestión de tu autolavado. Rápido, seguro y eficiente.</p>
+        
+        <div class="mt-4">
+            <a href="{% url 'admin:index' %}" class="btn btn-primary btn-lg">Acceder al Panel de Control</a>
+            <button class="btn btn-outline-secondary btn-lg">Ver Servicios</button>
+        </div>
+    </div>
+</div>
+
+<div class="row text-center mt-5">
+    <div class="col-md-4">
+        <h3>📅 Agendamiento</h3>
+        <p>Reserva tu cita en segundos sin cruces de horario.</p>
+    </div>
+    <div class="col-md-4">
+        <h3>🛒 Productos</h3>
+        <p>Compra insumos y accesorios desde nuestro carrito.</p>
+    </div>
+    <div class="col-md-4">
+        <h3>💬 PQRS</h3>
+        <p>Tu opinión nos ayuda a mejorar cada día.</p>
+    </div>
+</div>
+{% endblock %}
