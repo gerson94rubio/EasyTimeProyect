@@ -16,7 +16,12 @@
             <div class="navbar-nav ms-auto">
                 {% if user.is_authenticated %}
                     <span class="nav-link text-light">Hola, {{ user.username }}</span>
-                    <a class="nav-link btn btn-outline-light btn-sm ms-2" href="{% url 'logout' %}">Cerrar Sesión</a>
+                    <form method="post" action="{% url 'logout' %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-link btn btn-outline-light btn-sm ms-2" style="border: 1px solid #fff;">
+                            Cerrar Sesión
+                        </button>
+                    </form>  
                 {% else %}
                     <a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a>
                     <a class="nav-link btn btn-light text-dark btn-sm ms-2" href="#">Registrarse</a>
