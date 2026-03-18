@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="fw-bold mb-4 text-center">Nuestro Inventario</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for producto in productos %}
+        <div class="col">
+            <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden">
+                {% if producto.imagen %}
+                    <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-light text-muted d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="bi bi-image fs-1"></i>
+                    </div>
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">{{ producto.nombre }}</h5>
+                    <p class="text-muted small">{{ producto.descripcion|truncatechars:60 }}</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <span class="h4 text-primary mb-0">${{ producto.precio_venta }}</span>
+                        <span class="badge {% if producto.stock_actual > 0 %}bg-info{% else %}bg-danger{% endif %} rounded-pill">
+                            Stock: {{ producto.stock_actual }}
+                        </span>
+                    </div>
+                </div>
+                <div class="card-footer bg-white border-0 pb-3">
+                    {% if producto.stock_actual > 0 %}
+                        <a href="{% url 'agregar_carrito' producto.id %}" class="btn btn-dark w-100 rounded-pill">
+                            <i class="bi bi-cart-plus"></i> Comprar
+                        </a>
+                    {% else %}
+                        <button class="btn btn-secondary w-100 rounded-pill" disabled>Agotado</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <p class="fs-4 text-muted">No hay productos disponibles por el momento.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

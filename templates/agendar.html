@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-sm border-0 p-4">
+        <h2 class="text-center mb-4">Agendar Cita</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.as_p }}  <button type="submit" class="btn btn-primary">Agendar Cita</button>
+        </form>
+            </div>
+            <a href="{% url 'home' %}" class="btn btn-link w-100 mt-2">Volver al inicio</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

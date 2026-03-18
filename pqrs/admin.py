@@ -7,7 +7,7 @@ class PQRSAdmin(admin.ModelAdmin):
     list_filter = ('estado', 'tipo', 'fecha_creacion')
     search_fields = ('asunto', 'usuario__username')
     
-    # Campos que el admin puede editar para dar respuesta
+    # El admin solo escribe la respuesta y cambia el estado
     fields = ('usuario', 'tipo', 'asunto', 'descripcion', 'estado', 'respuesta_admin')
     readonly_fields = ('usuario', 'tipo', 'asunto', 'descripcion', 'fecha_creacion')
 

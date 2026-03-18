@@ -47,11 +47,12 @@ class User(AbstractUser):
         return f"{self.username} - {self.get_rol_display()}"
     
     def save(self, *args, **kwargs):
-        # Primero guardamos el usuario
-        super().save(*args, **kwargs)
-        
-        # Si es Jefe de Patio, le damos acceso al admin automáticamente
+    # 1. Aplicamos la lógica de negocio ANTES de guardar en la DB
         if self.rol == 'JEFE':
             self.is_staff = True
-            # Aquí podrías agregar más lógica de grupos si quisieras
-            super().save(update_fields=['is_staff'])
+        else:
+        # Es buena práctica quitarlo si el rol cambia a otro
+            self.is_staff = False
+        
+        # 2. Guardamos una única vez con toda la información procesada
+        super().save(*args, **kwargs)

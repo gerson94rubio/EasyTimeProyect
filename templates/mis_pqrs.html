@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h4 class="fw-bold">Radicar PQRS</h4>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Tipo</label>
+                            <select name="tipo" class="form-select" required>
+                                <option value="Peticion">Petición</option>
+                                <option value="Queja">Queja</option>
+                                <option value="Reclamo">Reclamo</option>
+                                <option value="Sugerencia">Sugerencia</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Asunto</label>
+                            <input type="text" name="asunto" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Descripción</label>
+                            <textarea name="descripcion" class="form-control" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Enviar Solicitud</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <h4 class="fw-bold">Mis Solicitudes</h4>
+            {% for p in solicitudes %}
+            <div class="card mb-3 border-0 shadow-sm">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <span class="badge {% if p.estado == 'Resuelto' %}bg-success{% else %}bg-warning text-dark{% endif %}">
+                        {{ p.estado }}
+                    </span>
+                    <small class="text-muted">{{ p.fecha_creacion|date:"d/m/Y" }}</small>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ p.tipo }}: {{ p.asunto }}</h5>
+                    <p class="card-text text-muted">{{ p.descripcion }}</p>
+                    
+                    {% if p.respuesta_admin %}
+                    <div class="mt-3 p-3 bg-light border-start border-primary border-4 rounded">
+                        <i class="bi bi-reply-fill text-primary"></i>
+                        <strong>Respuesta de EasyTime:</strong>
+                        <p class="mb-0 mt-1 italic">{{ p.respuesta_admin }}</p>
+                    </div>
+                    {% else %}
+                    <p class="small text-info mt-2"><i class="bi bi-clock"></i> Esperando respuesta del administrador...</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="alert alert-light border text-center">No has radicado ninguna PQRS aún.</div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

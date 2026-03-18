@@ -1,30 +1,43 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="p-5 mb-4 bg-light rounded-3 border">
-    <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold text-success">Bienvenido a EasyTime</h1>
-        <p class="col-md-8 fs-4">La solución integral para el agendamiento y gestión de tu autolavado. Rápido, seguro y eficiente.</p>
-        
-        <div class="mt-4">
-            <a href="{% url 'admin:index' %}" class="btn btn-primary btn-lg">Acceder al Panel de Control</a>
-            <button class="btn btn-outline-secondary btn-lg">Ver Servicios</button>
-        </div>
-    </div>
+<div class="hero-section text-center rounded-4 mb-5 shadow p-5 bg-light">
+    <h1 class="display-3 fw-bold">Tu vehículo merece lo mejor</h1>
+    <p class="lead">Reserva tu cita online y compra productos premium en un solo lugar.</p>
 </div>
 
-<div class="row text-center mt-5">
+<div class="row g-4 text-center">
     <div class="col-md-4">
-        <h3>📅 Agendamiento</h3>
-        <p>Reserva tu cita en segundos sin cruces de horario.</p>
+        <div class="card h-100 border-0 shadow-sm p-3">
+            <div class="card-body">
+                <i class="bi bi-calendar-check text-primary fs-1"></i>
+                <h3 class="card-title mt-3">Agendar Cita</h3>
+                <p class="card-text text-muted">Elige el servicio y la hora que mejor te convenga.</p>
+                <a href="{% url 'agendar' %}" class="btn btn-primary w-100 mt-2">Reservar ahora</a>
+            </div>
+        </div>
     </div>
+
     <div class="col-md-4">
-        <h3>🛒 Productos</h3>
-        <p>Compra insumos y accesorios desde nuestro carrito.</p>
+        <div class="card h-100 border-0 shadow-sm p-3">
+            <div class="card-body">
+                <i class="bi bi-cart4 text-success fs-1"></i>
+                <h3 class="card-title mt-3">Tienda Online</h3>
+                <p class="card-text text-muted">Accesorios y kits de limpieza para tu auto.</p>
+                <a href="{% url 'catalogo_productos' %}" class="btn btn-success w-100 mt-2">Ver Productos</a>
+            </div>
+        </div>
     </div>
+
     <div class="col-md-4">
-        <h3>💬 PQRS</h3>
-        <p>Tu opinión nos ayuda a mejorar cada día.</p>
+        <div class="card h-100 border-0 shadow-sm p-3">
+            <div class="card-body">
+                <i class="bi bi-chat-dots text-warning fs-1"></i>
+                <h3 class="card-title mt-3">Soporte y PQRS</h3>
+                <p class="card-text text-muted">¿Tienes alguna duda o reclamo? Estamos para ayudarte.</p>
+                <a href="{% url 'mis_pqrs' %}" class="btn btn-warning w-100 mt-2 text-white">Contactar</a>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

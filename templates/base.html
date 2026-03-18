@@ -2,31 +2,93 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}EasyTime{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EasyTime | Autolavado Pro</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-        .navbar { background-color: #004d40; }
-        .btn-primary { background-color: #00796b; border: none; }
+        :root { --primary-color: #0d6efd; --dark-blue: #0a192f; }
+        body { background-color: #f8f9fa; }
+        .navbar { background-color: var(--dark-blue) !important; padding: 1rem; }
+        /* Estilo para los mensajes flotantes */
+        .messages-container { position: fixed; top: 80px; right: 20px; z-index: 1050; min-width: 300px; }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark mb-4">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="{% url 'home' %}">🧼 EASYTIME</a>
-            <div class="navbar-nav ms-auto">
+
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{% url 'home' %}"><i class="bi bi-droplet-fill"></i> EASYTIME</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item"><a class="nav-link text-white" href="{% url 'agendar' %}">Servicios</a></li>
+                <li class="nav-item"><a class="nav-link text-white" href="{% url 'catalogo_productos' %}">Productos</a></li>
+            </ul>
+            <div class="d-flex align-items-center">
                 {% if user.is_authenticated %}
-                    <span class="nav-link text-light">Hola, {{ user.username }}</span>
-                    <a class="nav-link btn btn-outline-light btn-sm ms-2" href="{% url 'logout' %}">Cerrar Sesión</a>
+                    <a href="{% url 'ver_carrito' %}" class="btn btn-link text-white me-3 position-relative p-1">
+                        <i class="bi bi-cart3 fs-4"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" style="width: 10px; height: 10px;">
+                            <span class="visually-hidden">Nuevo</span>
+                        </span>
+                    </a>
+
+                    <div class="dropdown">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> {{ user.username }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="{% url 'mis_citas' %}">Mis Citas</a></li>
+                            <li><a class="dropdown-item" href="{% url 'ver_carrito' %}">Mi Carrito</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="post" action="{% url 'logout' %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item text-danger">Cerrar Sesión</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
                 {% else %}
-                    <a class="nav-link" href="{% url 'login' %}">Iniciar Sesión</a>
-                    <a class="nav-link btn btn-light text-dark btn-sm ms-2" href="#">Registrarse</a>
+                    <a href="{% url 'login' %}" class="btn btn-primary me-2">Iniciar Sesión</a>
+                    <a href="#" class="btn btn-light">Registrarse</a>
                 {% endif %}
             </div>
         </div>
-    </nav>
-
-    <div class="container">
-        {% block content %}{% endblock %}
     </div>
+</nav>
+
+<div class="container mt-3">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow-sm" role="alert">
+                {% if message.tags == 'success' %}<i class="bi bi-check-circle-fill me-2"></i>{% endif %}
+                {% if message.tags == 'error' %}<i class="bi bi-exclamation-triangle-fill me-2"></i>{% endif %}
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<div class="container mt-4">
+    {% block content %}{% endblock %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    setTimeout(function() {
+        let alerts = document.querySelectorAll('.alert');
+        alerts.forEach(function(alert) {
+            let bsAlert = new bootstrap.Alert(alert);
+            bsAlert.close();
+        });
+    }, 5000);
+</script>
+
 </body>
 </html>
