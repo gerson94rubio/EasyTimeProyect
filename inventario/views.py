@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Producto, Venta, DetalleVenta
 
+
 def catalogo_productos(request):
     productos = Producto.objects.all()
     return render(request, 'catalogo.html', {'productos': productos})

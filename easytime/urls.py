@@ -22,11 +22,13 @@ from . import views
 from agendamiento import views as agend_views
 from inventario import views as inv_views
 from pqrs import views as pqrs_views
+from usuarios import views as usuarios_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'), 
-    path('accounts/', include('django.contrib.auth.urls')), 
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/logout/', usuarios_views.custom_logout, name='logout'), 
 
     # --- AGENDAMIENTO ---
     path('agendar/', agend_views.agendar_cita, name='agendar'),
@@ -43,6 +45,7 @@ urlpatterns = [
     # --- PQRS ---
     path('pqrs/', pqrs_views.mis_pqrs, name='mis_pqrs'),
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
