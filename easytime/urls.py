@@ -28,21 +28,16 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'), 
     path('accounts/', include('django.contrib.auth.urls')),
-    path('accounts/logout/', usuarios_views.custom_logout, name='logout'), 
-
-    # --- AGENDAMIENTO ---
+    path('accounts/logout/', usuarios_views.custom_logout, name='logout'),
+    path('registrarse/', usuarios_views.registro_cliente, name='registro'),
+    path('perfil/', usuarios_views.mi_perfil, name='mi_perfil'),
     path('agendar/', agend_views.agendar_cita, name='agendar'),
     path('mis-citas/', agend_views.mis_citas, name='mis_citas'),
-
-    # --- INVENTARIO / CARRITO ---
     path('productos/', inv_views.catalogo_productos, name='catalogo_productos'),
     path('carrito/', inv_views.ver_carrito, name='ver_carrito'),
     path('comprar/<int:producto_id>/', inv_views.agregar_al_carrito, name='agregar_carrito'),
     path('pagar/<int:venta_id>/', inv_views.finalizar_compra, name='finalizar_compra'),
-    # Eliminamos la línea duplicada y corregimos el prefijo a inv_views:
     path('eliminar-del-carrito/<int:item_id>/', inv_views.eliminar_del_carrito, name='eliminar_item'),
-
-    # --- PQRS ---
     path('pqrs/', pqrs_views.mis_pqrs, name='mis_pqrs'),
 ]
 

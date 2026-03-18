@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow-lg border-0 rounded-4">
+            <div class="card-body p-5 text-center">
+                <h2 class="fw-bold mb-4">Crear Cuenta</h2>
+                <p class="text-muted mb-4">Únete a la comunidad EasyTime</p>
+                
+                <form method="post" class="text-start">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill mt-3">Registrarse</button>
+                </form>
+                
+                <hr class="my-4">
+                <p class="small text-muted">¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia Sesión</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Estilo rápido para los inputs de Django */
+    input, select { 
+        width: 100%; 
+        padding: 8px 15px; 
+        border-radius: 8px; 
+        border: 1px solid #ced4da;
+    }
+</style>
+{% endblock %}
