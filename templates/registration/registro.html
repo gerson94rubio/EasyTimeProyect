@@ -2,40 +2,131 @@
 
 {% block content %}
 <div class="row justify-content-center mt-5">
-    <div class="col-md-6 col-lg-4">
-        <div class="card shadow-lg border-0 rounded-4">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-lg border-0 rounded-4 bg-body-tertiary">
             <div class="card-body p-5 text-center">
-                <h2 class="fw-bold mb-4">Crear Cuenta</h2>
-                <p class="text-muted mb-4">Únete a la comunidad EasyTime</p>
+                <h2 class="fw-bold mb-4 custom-text-bright">Crear Cuenta</h2>
                 
-                <form method="post" class="text-start">
+                <form method="post" class="text-start" id="registroForm">
                     {% csrf_token %}
+                    
                     {% for field in form %}
                         <div class="mb-3">
-                            <label class="form-label fw-bold small">{{ field.label }}</label>
-                            {{ field }}
+                            <label class="form-label fw-bold small custom-text-bright">{{ field.label }}</label>
+                            
+                            {% if field.name == 'cedula' or field.name == 'telefono' %}
+                                <input type="text" name="{{ field.name }}" class="form-control custom-input" 
+                                       pattern="[0-9]+" oninput="this.value = this.value.replace(/[^0-9]/g, '')" required>
+                            
+                            {% elif field.name == 'email' %}
+                                <input type="email" name="{{ field.name }}" id="id_email" class="form-control custom-input" 
+                                       placeholder="ejemplo@correo.com" required>
+                                <div id="email-alert" class="text-danger small mt-1" style="display: none;">
+                                    Formato de correo inválido (falta @ o dominio).
+                                </div>
+
+                            {% elif "password" in field.name %}
+                                <input type="password" name="{{ field.name }}" class="form-control custom-input password-field" required>
+                                <div class="progress mt-2" style="height: 5px;">
+                                    <div class="progress-bar password-strength-bar" role="progressbar" style="width: 0%"></div>
+                                </div>
+                                <small class="custom-text-dim password-text" style="font-size: 0.7rem;">Seguridad: muy débil</small>
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+
                             {% if field.errors %}
-                                <div class="text-danger small">{{ field.errors }}</div>
+                                <div class="text-danger small mt-1">{{ field.errors }}</div>
                             {% endif %}
                         </div>
                     {% endfor %}
-                    <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill mt-3">Registrarse</button>
+
+                    <div class="mt-4 p-3 rounded-3 border bg-light-subtle">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" name="notificaciones" id="id_notificaciones">
+                            <label class="form-check-label small custom-text-dim" for="id_notificaciones">Deseo recibir promociones.</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="terminos" id="id_terminos" required>
+                            <label class="form-check-label small custom-text-dim" for="id_terminos">
+                                Acepto los <a href="#" class="text-decoration-none fw-bold">términos y condiciones</a>.
+                            </label>
+                            <div id="terminos-error" class="text-danger small mt-1" style="display: none;">
+                                Es obligatorio aceptar los términos para registrarse.
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill mt-4 fw-bold">Registrarse</button>
                 </form>
-                
-                <hr class="my-4">
-                <p class="small text-muted">¿Ya tienes cuenta? <a href="{% url 'login' %}">Inicia Sesión</a></p>
             </div>
         </div>
     </div>
 </div>
 
+<script>
+    const form = document.getElementById('registroForm');
+    const terminosCheckbox = document.getElementById('id_terminos');
+    const terminosError = document.getElementById('terminos-error');
+    const emailInput = document.getElementById('id_email');
+    const emailAlert = document.getElementById('email-alert');
+
+    // VALIDACIÓN AL ENVIAR EL FORMULARIO
+    form.addEventListener('submit', (e) => {
+        if (!terminosCheckbox.checked) {
+            e.preventDefault(); // Detiene el envío
+            terminosError.style.display = 'block';
+            terminosCheckbox.focus();
+        } else {
+            terminosError.style.display = 'none';
+        }
+    });
+
+    // Validación de Correo en tiempo real
+    emailInput.addEventListener('input', () => {
+        const val = emailInput.value;
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (val.length > 0 && !emailPattern.test(val)) {
+            emailAlert.style.display = 'block';
+            emailInput.classList.add('is-invalid');
+        } else {
+            emailAlert.style.display = 'none';
+            emailInput.classList.remove('is-invalid');
+        }
+    });
+
+    // Validación de Seguridad de Contraseñas
+    const passwordFields = document.querySelectorAll('.password-field');
+    passwordFields.forEach((input, index) => {
+        const progressBar = document.querySelectorAll('.password-strength-bar')[index];
+        const progressText = document.querySelectorAll('.password-text')[index];
+
+        input.addEventListener('input', () => {
+            const val = input.value;
+            let strength = 0;
+            if (val.length > 5) strength += 25;
+            if (val.match(/[A-Z]/)) strength += 25;
+            if (val.match(/[0-9]/)) strength += 25;
+            if (val.match(/[^A-Za-z0-9]/)) strength += 25;
+            progressBar.style.width = strength + '%';
+            if (strength <= 25) { progressBar.className = 'progress-bar bg-danger'; progressText.innerText = 'Seguridad: Débil'; }
+            else if (strength <= 50) { progressBar.className = 'progress-bar bg-warning'; progressText.innerText = 'Seguridad: Media'; }
+            else if (strength <= 75) { progressBar.className = 'progress-bar bg-info'; progressText.innerText = 'Seguridad: Buena'; }
+            else { progressBar.className = 'progress-bar bg-success'; progressText.innerText = 'Seguridad: Excelente'; }
+        });
+    });
+</script>
+
 <style>
-    /* Estilo rápido para los inputs de Django */
-    input, select { 
-        width: 100%; 
-        padding: 8px 15px; 
-        border-radius: 8px; 
-        border: 1px solid #ced4da;
+    [data-bs-theme="dark"] .custom-text-bright { color: #E2E8F0; }
+    [data-bs-theme="dark"] .custom-text-dim { color: #94A3B8; }
+    [data-bs-theme="light"] .custom-text-bright { color: #212529; }
+    [data-bs-theme="light"] .custom-text-dim { color: #6c757d; }
+
+    input:not([type="checkbox"]), select { 
+        width: 100%; padding: 10px 15px; border-radius: 10px; 
+        border: 1px solid #ced4da; background-color: var(--bs-body-bg); color: var(--bs-body-color);
     }
+    .is-invalid { border-color: #dc3545 !important; }
 </style>
 {% endblock %}

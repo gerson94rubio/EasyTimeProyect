@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %} 
+
+{% block content %}
+<div class="container mt-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold custom-text-bright">Nuestros Servicios de Lavado</h2>
+        <p class="custom-text-dim">Selecciona el tratamiento ideal para tu vehículo.</p>
+    </div>
+
+    <div class="row g-4">
+        {% for servicio in servicios %}
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden bg-body-tertiary">
+                {% if servicio.imagen %}
+                    <img src="{{ servicio.imagen.url }}" class="card-img-top" alt="{{ servicio.nombre }}" style="height: 200px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-secondary-subtle d-flex align-items-center justify-content-center" style="height: 200px;">
+                        <i class="bi bi-droplet-half text-secondary opacity-50" style="font-size: 3rem;"></i>
+                    </div>
+                {% endif %}
+
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title fw-bold custom-text-bright">{{ servicio.nombre }}</h5>
+                    <p class="card-text custom-text-dim small flex-grow-1">
+                        {{ servicio.descripcion|default:"Cuidado profesional para tu vehículo con los mejores productos." }}
+                    </p>
+                    
+                    <div class="mt-3">
+                        <hr class="border-secondary opacity-25">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <span class="custom-text-dim small">
+                                <i class="bi bi-clock me-1"></i>{{ servicio.duracion_estimada }}
+                            </span>
+                            <span class="h4 mb-0 fw-bold text-primary">
+                                ${{ servicio.precio|floatformat:0|intcomma }}
+                            </span>
+                        </div>
+                        
+                        <a href="{% url 'agendar_con_servicio' servicio.id %}" class="btn btn-primary w-100 rounded-pill fw-bold shadow-sm py-2">
+                            <i class="bi bi-calendar-check me-2"></i>Agendar Cita
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5">
+            <p class="h5 custom-text-dim">Aún no hay servicios disponibles.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+    /* VARIABLES DE COLOR ADAPTABLES (Blanco Hueso para Dark Mode) */
+    [data-bs-theme="dark"] .custom-text-bright { color: #E2E8F0; }
+    [data-bs-theme="dark"] .custom-text-dim { color: #94A3B8; }
+    [data-bs-theme="light"] .custom-text-bright { color: #212529; }
+    [data-bs-theme="light"] .custom-text-dim { color: #6c757d; }
+
+    .card { 
+        transition: transform 0.3s ease, box-shadow 0.3s ease; 
+        border: 1px solid transparent !important;
+    }
+    
+    [data-bs-theme="dark"] .card {
+        border: 1px solid #334155 !important;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.15) !important;
+    }
+</style>
+{% endblock %}

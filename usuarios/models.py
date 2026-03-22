@@ -1,8 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-# Create your models here.
-
 class User(AbstractUser):
     # Opciones para el tipo de documento
     TIPO_DOC_CHOICES = [
@@ -20,9 +18,9 @@ class User(AbstractUser):
         default='CC'
     )
 
-    # Esto cambia el texto "Username" por algo más profesional
+    # Nombre de usuario con etiqueta amigable
     username = models.CharField(
-        'Nombre de Usuario', # Etiqueta amigable
+        'Nombre de Usuario',
         max_length=150,
         unique=True,
         help_text='Nombre único para entrar al sistema.',
@@ -34,7 +32,7 @@ class User(AbstractUser):
     identificacion = models.CharField(max_length=20, unique=True, null=True)
     telefono = models.CharField(max_length=15, blank=True, null=True)
     
-    # Roles para EasyTime
+    # Roles definidos para el sistema EasyTime
     ROL_CHOICES = [
         ('ADMIN', 'Administrador'),
         ('JEFE', 'Jefe de Patio'),
@@ -43,16 +41,17 @@ class User(AbstractUser):
     rol = models.CharField(max_length=10, choices=ROL_CHOICES, default='CLIENTE')
 
     def __str__(self):
-        # Usamos self.username que viene de AbstractUser y nuestro campo rol
         return f"{self.username} - {self.get_rol_display()}"
     
     def save(self, *args, **kwargs):
-    # 1. Aplicamos la lógica de negocio ANTES de guardar en la DB
-        if self.rol == 'JEFE':
+        # LOGICA DE SEGURIDAD:
+        # Solo permitimos 'is_staff' (acceso al panel admin) si el rol es ADMIN o JEFE.
+        # También verificamos si ya es superusuario para no quitarle el permiso por accidente.
+        if self.rol in ['ADMIN', 'JEFE'] or self.is_superuser:
             self.is_staff = True
         else:
-        # Es buena práctica quitarlo si el rol cambia a otro
+            # Los CLIENTES siempre tendrán is_staff en False, bloqueando su acceso al admin.
             self.is_staff = False
         
-        # 2. Guardamos una única vez con toda la información procesada
+        # Guardamos los cambios en la base de datos
         super().save(*args, **kwargs)

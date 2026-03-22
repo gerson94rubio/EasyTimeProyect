@@ -36,8 +36,16 @@ class DetalleEntrada(models.Model):
 class Venta(models.Model):
     cliente = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     fecha_venta = models.DateTimeField(auto_now_add=True)
-    total = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    total = models.DecimalField(max_digits=12, decimal_places=2, default=0) # Campo original de la BD
     pagado = models.BooleanField(default=False)
+
+    @property
+    def obtener_total_carrito(self):
+        return sum(item.obtener_subtotal for item in self.items_venta.all())
+
+    def __str__(self):
+        estado = "Pagado" if self.pagado else "Carrito Activo"
+        return f"Venta {self.id} - {self.cliente} ({estado})"
 
 class DetalleVenta(models.Model):
     venta = models.ForeignKey(Venta, related_name='items_venta', on_delete=models.CASCADE)
@@ -45,6 +53,9 @@ class DetalleVenta(models.Model):
     cantidad = models.PositiveIntegerField()
     precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
 
+    @property
+    def obtener_subtotal(self):
+        return self.precio_unitario * self.cantidad
+
     def save(self, *args, **kwargs):
-        # Quitamos la resta de stock de aquí para que no baje al "añadir al carrito"
         super().save(*args, **kwargs)

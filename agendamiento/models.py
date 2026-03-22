@@ -6,6 +6,8 @@ class Servicio(models.Model):
     descripcion = models.TextField(blank=True)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
     duracion_estimada = models.DurationField(help_text="Formato: HH:MM:SS")
+    # CORRECCIÓN: Añadimos el campo de imagen para que se vea en el catálogo
+    imagen = models.ImageField(upload_to='servicios/', null=True, blank=True)
 
     def __str__(self):
         return f"{self.nombre} - ${self.precio}"
