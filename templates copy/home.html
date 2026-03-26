@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="hero-section text-center rounded-4 mb-5 shadow-sm p-5 bg-body-tertiary border-0">
+        <h1 class="display-3 fw-bold custom-text-bright">Tu vehículo merece lo mejor</h1>
+        <p class="lead custom-text-dim">Reserva tu cita online y compra productos premium en un solo lugar.</p>
+    </div>
+
+    <div class="row g-4 text-center">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-3 bg-body-tertiary rounded-4">
+                <div class="card-body d-flex flex-column">
+                    <div class="mb-3">
+                        <i class="bi bi-calendar-check text-primary display-4"></i>
+                    </div>
+                    <h3 class="card-title mt-2 fw-bold custom-text-bright">Agendar Cita</h3>
+                    <p class="card-text custom-text-dim">Elige el servicio y la hora que mejor te convenga.</p>
+                    <a href="{% url 'agendar' %}" class="btn btn-primary w-100 mt-auto rounded-pill fw-bold py-2">
+                        Reservar ahora
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-3 bg-body-tertiary rounded-4">
+                <div class="card-body d-flex flex-column">
+                    <div class="mb-3">
+                        <i class="bi bi-cart4 text-success display-4"></i>
+                    </div>
+                    <h3 class="card-title mt-2 fw-bold custom-text-bright">Tienda Online</h3>
+                    <p class="card-text custom-text-dim">Accesorios y kits de limpieza para tu auto.</p>
+                    <a href="{% url 'catalogo_productos' %}" class="btn btn-success w-100 mt-auto rounded-pill fw-bold py-2">
+                        Ver Productos
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-3 bg-body-tertiary rounded-4">
+                <div class="card-body d-flex flex-column">
+                    <div class="mb-3">
+                        <i class="bi bi-car-front-fill text-info display-4"></i>
+                        <i class="bi bi-stars text-warning position-absolute translate-middle-y" style="font-size: 1.5rem;"></i>
+                    </div>
+                    <h3 class="card-title mt-2 fw-bold custom-text-bright">Servicios</h3>
+                    <p class="card-text custom-text-dim">Conoce nuestros paquetes de lavado y limpieza premium.</p>
+                    <a href="{% url 'servicios' %}" class="btn btn-info w-100 mt-auto rounded-pill fw-bold text-white py-2">
+                        Ver Servicios
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Card 4: Gestión de Usuarios -->
+<div class="col-md-4">
+    <div class="card h-100 border-0 shadow-sm p-3 bg-body-tertiary rounded-4">
+        <div class="card-body d-flex flex-column">
+            <div class="mb-3">
+                <i class="bi bi-people-fill text-warning display-4"></i>
+            </div>
+            <h3 class="card-title mt-2 fw-bold custom-text-bright">Gestión de Usuarios</h3>
+            <p class="card-text custom-text-dim">Administra los usuarios del sistema.</p>
+            <a href="{% url 'lista_usuarios' %}" class="btn btn-warning w-100 mt-auto rounded-pill fw-bold py-2">
+                Ver Usuarios
+            </a>
+        </div>
+    </div>
+</div>
+    </div>
+</div>
+
+<style>
+    /* Colores Adaptables (Definidos en base.html, pero reforzados aquí) */
+    [data-bs-theme="dark"] .custom-text-bright { color: #E2E8F0; }
+    [data-bs-theme="dark"] .custom-text-dim { color: #94A3B8; }
+    [data-bs-theme="light"] .custom-text-bright { color: #212529; }
+    [data-bs-theme="light"] .custom-text-dim { color: #6c757d; }
+
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid transparent !important;
+    }
+    
+    [data-bs-theme="dark"] .card {
+        border: 1px solid #334155 !important;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 24px rgba(0,0,0,0.15) !important;
+    }
+
+    /* Estilo para el botón de servicios */
+    .btn-primary {
+        background-color: var(--blue) !important;
+        border-color: var(--blue) !important;
+    }
+
+    .btn-success {
+        background-color: var(--blue) !important;
+        border-color: var(--blue) !important;
+    }
+
+    .btn-info {
+        background-color: var(--blue) !important;
+        border-color: var(--blue) !important;
+    }
+    
+    .btn-info:hover {
+        background-color: var(--blue) !important;
+        border-color: #0baccc !important;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0 p-4 rounded-4 bg-body-tertiary">
+                <h2 class="text-center mb-4 fw-bold custom-text-bright">Agendar Cita</h2>
+
+                <div class="mb-4 p-3 bg-primary bg-opacity-10 border-start border-primary border-4 rounded-3 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="mb-1 fw-bold text-primary text-uppercase small">Valor del Servicio</h6>
+                        <h3 class="mb-0 fw-bold custom-text-bright" id="precio-resumen">
+                            {% if servicio_seleccionado %}
+                                ${{ servicio_seleccionado.precio|floatformat:0|intcomma }}
+                            {% else %}
+                                $0
+                            {% endif %}
+                        </h3>
+                    </div>
+                    <i class="bi bi-cash-stack fs-1 text-primary opacity-50"></i>
+                </div>
+
+                <form method="POST" id="form-agendar">
+                    {% csrf_token %}
+                    
+                    <div class="row g-3 text-start">
+                        {% for field in form %}
+                            <div class="col-12 mb-3">
+                                <label class="form-label fw-bold small custom-text-bright">{{ field.label }}</label>
+                                <div class="django-field-wrapper">
+                                    {# Django renderiza el input aquí y el CSS de abajo le da el estilo #}
+                                    {{ field }}
+                                </div>
+                                {% if field.errors %}
+                                    <div class="text-danger small mt-1">{{ field.errors }}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill shadow-sm fw-bold">
+                            <i class="bi bi-calendar-check me-2"></i>Confirmar Agendamiento
+                        </button>
+                        
+                        <a href="{% url 'servicios' %}" class="btn btn-link w-100 mt-2 text-decoration-none custom-text-dim small">
+                            <i class="bi bi-arrow-left me-1"></i>Cambiar servicio
+                        </a>
+                        <div class="text-center mt-5 mb-4">
+        <hr class="text-muted opacity-25"> <!-- Una línea divisoria sutil -->
+        <a href="{% url 'home' %}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
+            <i class="bi bi-arrow-left me-2"></i>Volver al Inicio
+        </a>
+    </div>
+</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectServicio = document.querySelector('select[name="servicio"]');
+        const displayPrecio = document.getElementById('precio-resumen');
+
+        // Diccionario de precios generado desde Python/Django
+        const listaPrecios = {
+            {% for s in form.fields.servicio.queryset %}
+                "{{ s.id }}": "{{ s.precio|floatformat:0|intcomma }}",
+            {% endfor %}
+        };
+
+        function actualizarPrecio() {
+            const idSeleccionado = selectServicio.value;
+            const precioFormateado = listaPrecios[idSeleccionado] || "0";
+            displayPrecio.innerText = '$' + precioFormateado;
+        }
+
+        if (selectServicio) {
+            selectServicio.addEventListener('change', actualizarPrecio);
+            // Ejecución inicial por si el formulario ya tiene un valor cargado
+            actualizarPrecio();
+        }
+    });
+</script>
+
+<style>
+    /* VARIABLES DE COLOR (Blanco Hueso para Modo Oscuro) */
+    [data-bs-theme="dark"] .custom-text-bright { color: #E2E8F0; }
+    [data-bs-theme="dark"] .custom-text-dim { color: #94A3B8; }
+    [data-bs-theme="light"] .custom-text-bright { color: #212529; }
+    [data-bs-theme="light"] .custom-text-dim { color: #6c757d; }
+
+    /* ESTILO UNIFICADO DE INPUTS PARA DJANGO */
+    input, select, textarea {
+        display: block;
+        width: 100% !important;
+        padding: 12px 15px !important;
+        font-size: 1rem;
+        border-radius: 12px !important;
+        border: 1px solid #ced4da !important;
+        background-color: var(--bs-body-bg) !important;
+        color: var(--bs-body-color) !important;
+        transition: all 0.3s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+        border-color: #0d6efd !important;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15) !important;
+    }
+
+    /* Ajuste para que el Textarea no se vea muy pequeño */
+    textarea {
+        min-height: 100px;
+    }
+
+    /* Ajuste para el cuadro de precio en modo oscuro */
+    .bg-primary-subtle, .bg-opacity-10 {
+        background-color: rgba(13, 110, 253, 0.1) !important;
+    }
+</style>
+{% endblock %}

@@ -47,6 +47,18 @@ urlpatterns = [
     
     # PQRS
     path('pqrs/', pqrs_views.mis_pqrs, name='mis_pqrs'),
+
+    # Usuarios y Autenticación
+path('accounts/', include('django.contrib.auth.urls')),
+path('accounts/logout/', usuarios_views.custom_logout, name='logout'),
+path('registrarse/', usuarios_views.registro_cliente, name='registro'),
+path('perfil/', usuarios_views.mi_perfil, name='mi_perfil'),
+
+# 🔹 AGREGA ESTO (para administración de usuarios):
+path('admin-usuarios/', usuarios_views.lista_usuarios, name='lista_usuarios'),
+path('admin-usuarios/crear/', usuarios_views.crear_usuario, name='crear_usuario'),
+path('admin-usuarios/editar/<int:pk>/', usuarios_views.editar_usuario, name='editar_usuario'),
+path('admin-usuarios/eliminar/<int:pk>/', usuarios_views.eliminar_usuario, name='eliminar_usuario'),
 ]
 
 # Configuración para servir archivos multimedia (imágenes de productos) en desarrollo

@@ -1,0 +1,14 @@
+{% extends "admin/change_list.html" %}
+{% load i18n static %}
+
+{% block object-tools-items %}
+    {# Mantenemos el botón de 'Añadir Usuario' original #}
+    {{ block.super }}
+    
+    {# Añadimos nuestro botón personalizado #}
+    <li>
+        <a href="print-report/" class="addlink" style="background-color: #28a745 !important; border-color: #218838 !important;">
+            Generar PDF General
+        </a>
+    </li>
+{% endblock %}
