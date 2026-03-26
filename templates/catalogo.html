@@ -2,8 +2,9 @@
 {% load humanize %}
 
 {% block content %}
+
 <div class="container mt-5">
-    <h2 class="fw-bold mb-4 text-center text-body">Inventario de Productos - EasyTime</h2>
+    <h2 class="fw-bold mb-4 text-center text-body">Productos</h2>
     
     <div class="row row-cols-1 row-cols-md-3 g-4">
         {% for producto in productos %}
@@ -92,6 +93,15 @@
         {% endfor %}
     </div>
 </div>
+<br><br><br>
+
+<div class="text-center mt-5 mb-4">
+        <hr class="text-muted opacity-25"> <!-- Linea divisoria-->
+        <a href="{% url 'home' %}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
+            <i class="bi bi-arrow-left me-2"></i>Volver al Inicio
+        </a>
+    </div>
+</div>
 
 <style>
     /* Control de descripción */
@@ -130,16 +140,17 @@
 <script>
     // Función para los botones de +/-
     function cambiarCantidad(btn, cambio) {
-        const input = btn.parentElement.querySelector('input[type="number"]');
-        let valorActual = parseInt(input.value);
-        const maxVal = parseInt(input.getAttribute('max'));
-        
-        let nuevoValor = valorActual + cambio;
-        
-        if (nuevoValor >= 1 && nuevoValor <= maxVal) {
-            input.value = nuevoValor;
-        }
+    const input = btn.parentElement.querySelector('input[type="number"]');
+    let valorActual = parseInt(input.value);
+    const maxVal = parseInt(input.getAttribute('max'));
+    let nuevoValor = valorActual + cambio;
+    if (nuevoValor >= 1 && nuevoValor <= maxVal) {
+        input.value = nuevoValor;
+    } else if (nuevoValor > maxVal) {
+        // Mensaje por si pone más de lo que hay disponible
+        alert("Lo sentimos, solo quedan " + maxVal + " unidades disponibles.");
     }
+}
 
     // Lógica de "Leer más"
     document.addEventListener('DOMContentLoaded', function() {

@@ -73,6 +73,17 @@
                 <li class="nav-item"><a class="nav-link text-white" href="{% url 'mis_pqrs' %}">Soporte y PQRS</a></li>
                 <!--<li class="nav-item"><a class="nav-link text-white" href="{% url 'catalogo_productos' %}">Productos</a></li> -->
             </ul>
+
+        <!--Botón panel administración si es superusuario-->
+            <ul class="navbar-nav ms-auto align-items-center"> <!--Así logré que se centrara en el navbar-->
+                {% if user.is_superuser %}
+                 <li class="nav-item">
+                     <a class="btn btn-warning rounded-pill px-3 shadow-sm me-2" href="{% url 'admin:index' %}" target="_blank">
+                        <i class="bi bi-shield-lock-fill me-1"></i> Panel Administración
+                    </a>
+                </li>
+                {% endif %}
+
             <div class="d-flex align-items-center">
                 <button class="btn btn-link text-white me-2 p-1" id="themeBtn" title="Cambiar modo">
                     <i class="bi bi-moon-stars-fill fs-5" id="themeIcon"></i>
