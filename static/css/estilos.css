@@ -1,0 +1,19 @@
+header {
+    background-color: #459fe9;
+    color: white;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+}
+
+footer {
+    background-color: #459fe9;
+    color: white;
+}
