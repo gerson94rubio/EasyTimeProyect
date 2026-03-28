@@ -1,0 +1,35 @@
+{% extends "reporte_master.html" %}
+
+{% block titulo %}Reporte de Clientes - EasyTime{% endblock %}
+
+{% block contenido %}
+    <h2>Listado de Usuarios Registrados</h2>
+    <p>Fecha del reporte: {% now "d/m/Y H:i" %}</p>
+    
+    <table border="1" style="width: 100%; border-collapse: collapse; text-align: left;">
+        <thead style="background-color: #343a40; color: white;">
+            <tr>
+                <th style="padding: 10px;">ID</th>
+                <th style="padding: 10px;">Nombre Completo</th>
+                <th style="padding: 10px;">Identificación</th>
+                <th style="padding: 10px;">Teléfono</th>
+                <th style="padding: 10px;">Rol</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for u in usuarios %}
+            <tr>
+                <td style="padding: 8px;">{{ u.id }}</td>
+                <td style="padding: 8px;">{{ u.first_name }} {{ u.last_name }}</td>
+                <td style="padding: 8px;">{{ u.identificacion }}</td>
+                <td style="padding: 8px;">{{ u.telefono }}</td>
+                <td style="padding: 8px;">{{ u.get_rol_display|default:u.rol }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" style="text-align: center; padding: 20px;">No hay usuarios seleccionados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

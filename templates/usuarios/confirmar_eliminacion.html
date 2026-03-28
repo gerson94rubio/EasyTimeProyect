@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Eliminar Usuario{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-exclamation-triangle"></i> 
+                        Confirmar Eliminación
+                    </h4>
+                </div>
+                <div class="card-body text-center py-4">
+                    <i class="fas fa-user-times fa-4x text-danger mb-3"></i>
+                    
+                    <h5 class="mb-3">¿Está seguro de eliminar este usuario?</h5>
+                    
+                    <div class="alert alert-light">
+                        <p class="mb-1"><strong>Usuario:</strong> {{ usuario.username }}</p>
+                        <p class="mb-1"><strong>Nombre:</strong> {{ usuario.first_name }} {{ usuario.last_name }}</p>
+                        <p class="mb-0"><strong>Correo:</strong> {{ usuario.email }}</p>
+                    </div>
+                    
+                    <p class="text-danger fw-bold">
+                        <i class="fas fa-warning"></i> 
+                        Esta acción no se puede deshacer.
+                    </p>
+                    
+                    <form method="post" class="mt-4">
+                        {% csrf_token %}
+                        <a href="{% url 'lista_usuarios' %}" class="btn btn-secondary me-2">
+                            <i class="fas fa-times"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Sí, eliminar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

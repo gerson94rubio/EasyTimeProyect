@@ -1,0 +1,30 @@
+{% extends "reporte_master.html" %}
+
+{% block titulo %}Reporte de Ventas EasyTime{% endblock %}
+
+{% block contenido %}
+    <h2>Historial de Ventas (Carrito de Clientes)</h2>
+    <table border="1" style="width: 100%; border-collapse: collapse;">
+        <thead style="background-color: #007bff; color: white;">
+            <tr>
+                <th>Factura #</th>
+                <th>Cliente</th>
+                <th>Fecha</th>
+                <th>Total Pago</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for v in ventas %}
+            <tr>
+                <td>{{ v.id }}</td>
+                <td>{{ v.cliente.username }}</td>
+                <td>{{ v.fecha_venta|date:"d/m/Y" }}</td>
+                <td>${{ v.total }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="4">No hay ventas registradas.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <h3 style="text-align: right; margin-top: 20px;">Total Recaudado: ${{ total_ganado }}</h3>
+{% endblock %}
