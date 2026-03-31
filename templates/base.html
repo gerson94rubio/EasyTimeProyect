@@ -109,6 +109,29 @@
                         {% endif %}
                     </a>
 
+                <!-- 🔔 NOTIFICACIONES -->
+            {% if user.is_staff or user.rol == 'ADMIN' or user.rol == 'JEFE' %}
+            <a href="#" class="btn btn-link text-white me-3 position-relative p-1 shadow-none" id="noti-link" data-bs-toggle="dropdown">
+                <i class="bi bi-bell fs-4"></i>
+            <span id="badge-notificaciones" class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger border border-light cart-badge" style="display: none;">
+            0
+            </span>
+            </a>
+
+            <!-- Dropdown de notificaciones -->
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0" id="lista-notificaciones" style="min-width: 300px; max-height: 400px; overflow-y: auto;">
+            <li><h6 class="dropdown-header py-2">🔔 Notificaciones</h6></li>
+            <li><hr class="dropdown-divider"></li>
+            <li id="sin-notificaciones">
+            <a class="dropdown-item text-center text-muted py-3" href="#">
+            <i class="bi bi-check-circle"></i> No hay notificaciones nuevas
+            {% endif %}
+        </a>
+    </li>
+</ul>
+<!-- FIN NOTIFICACIONES -->
+
+
                     <div class="dropdown">
                         <button class="btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
                             <i class="bi bi-person-circle"></i> {{ user.username }}
@@ -227,6 +250,76 @@
         }
     }
 </script>
+
+
+<!-- 🔔 SCRIPT PARA NOTIFICACIONES -->
+<script>
+    function verificarNotificaciones() {
+        
+        const userRol = "{{ user.rol }}";
+        const esStaff = "{% if user.is_staff %}true{% else %}false{% endif %}";
+
+       if (!esStaff && userRol !== 'ADMIN' && userRol !== 'JEFE') {
+    return;
+}
+        fetch("{% url 'agendamiento:obtener_notificaciones' %}")
+            .then(response => response.json())
+            .then(data => {
+                const badge = document.getElementById('badge-notificaciones');
+                const lista = document.getElementById('lista-notificaciones');
+                const sinNoti = document.getElementById('sin-notificaciones');
+                
+                if (data.count > 0) {
+                    badge.style.display = 'block';
+                    badge.innerText = data.count > 9 ? '9+' : data.count;
+                    
+                    if (sinNoti) sinNoti.style.display = 'none';
+                    
+                    const items = lista.querySelectorAll('.dropdown-item, .dropdown-divider');
+                    items.forEach(item => {
+                        if (!item.closest('#sin-notificaciones')) item.remove();
+                    });
+                    
+                    const divider = document.createElement('li');
+                    divider.innerHTML = '<hr class="dropdown-divider m-0">';
+                    lista.appendChild(divider);
+                    
+                    data.notificaciones.forEach(noti => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <a class="dropdown-item py-3 border-bottom" href="/agendamiento/notificacion/${noti.id}/detalle/">
+            <div class="d-flex justify-content-between align-items-start">
+                <div class="flex-grow-1">
+                    <small class="text-dark">${noti.mensaje}</small>
+                    <div class="small text-muted mt-1">
+                        <i class="bi bi-clock me-1"></i>${noti.fecha}
+                    </div>
+                </div>
+                <i class="bi bi-chevron-right text-muted"></i>
+            </div>
+        </a>
+                        `;
+                        lista.appendChild(li);
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    
+    function marcarLeida(id) {
+        fetch("/agendamiento/notificacion/${id}/marcar-leida/", {
+            method: 'POST',
+            headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+        }).then(() => verificarNotificaciones());
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        verificarNotificaciones();
+        setInterval(verificarNotificaciones, 5000);
+    });
+</script>
+<!-- FIN SCRIPT -->
 
 </body>
 </html>
