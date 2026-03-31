@@ -14,6 +14,18 @@
                         <p class="mb-2"><strong class="custom-text-bright">Usuario:</strong> <span class="custom-text-dim">{{ user.username }}</span></p>
                         <p class="mb-2"><strong class="custom-text-bright">Correo:</strong> <span class="custom-text-dim">{{ user.email }}</span></p>
                         <p class="mb-0"><strong class="custom-text-bright">Identificación:</strong> <span class="custom-text-dim">{{ user.tipo_documento }} - {{ user.identificacion }}</span></p>
+                        
+                        <!-- ✅ AGREGA ESTO: Campo de Rol -->
+                        <p><strong>Rol:</strong> 
+                        {% if user.rol == 'ADMIN' %}
+                        <span class="badge bg-danger">Administrador</span>
+                        {% elif user.rol == 'JEFE' %}
+                        <span class="badge bg-warning text-dark">Jefe de Patio</span>
+                        {% else %}
+                        <span class="badge bg-info">Cliente</span>
+                        {% endif %}
+                        </p>
+               </div>
                     </div>
 
                     <hr class="border-secondary opacity-25 my-4">

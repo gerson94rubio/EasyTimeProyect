@@ -43,3 +43,19 @@ class Cita(models.Model):
 
     def __str__(self):
         return f"Cita {self.id}: {self.usuario.username} - {self.fecha_hora}"
+
+
+class Notificacion(models.Model):  # ← ✅ BIEN: Al mismo nivel que Cita
+    usuario = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.CASCADE
+    )
+    mensaje = models.CharField(max_length=255)
+    leida = models.BooleanField(default=False)
+    fecha = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-fecha']
+    
+    def __str__(self):
+        return self.mensaje

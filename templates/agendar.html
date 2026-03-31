@@ -70,7 +70,7 @@
         // Diccionario de precios generado desde Python/Django
         const listaPrecios = {
             {% for s in form.fields.servicio.queryset %}
-                "{{ s.id }}": "{{ s.precio|floatformat:0|intcomma }}",
+            "{{ s.id }}": "{{ s.precio|floatformat:0|intcomma }}",
             {% endfor %}
         };
 
