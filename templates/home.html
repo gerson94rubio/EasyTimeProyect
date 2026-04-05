@@ -59,7 +59,7 @@ style="width: 100%; height: auto; display: block; object-fit: cover;">
         </div>
 
     
-         {% if user.rol == 'ADMIN' or user.rol == 'JEFE' or user.is_superuser %}
+         {% if user.rol == 'ADMIN' or user.is_superuser %} <!-- 05/04/2026 Solo visible para administradores -->
          <div class="col-md-4">
             <div class="card h-100 border-0 shadow-sm p-3 bg-body-tertiary rounded-4">
                 <div class="card-body d-flex flex-column">

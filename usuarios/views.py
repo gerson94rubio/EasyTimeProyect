@@ -37,13 +37,12 @@ def mi_perfil(request):
         
     return render(request, 'registration/perfil.html', {'form': form})
 
-# ===================================================================
-# ADMINISTRACIÓN DE USUARIOS (Solo para ADMIN y JEFE)
-# ===================================================================
+
+# ADMINISTRACIÓN DE USUARIOS (Solo para ADMIN)(05/04/2026 eliminacion de jefe de patio)
 
 def es_admin(user):
-    """Verifica si el usuario es ADMIN, JEFE o superuser"""
-    return user.is_authenticated and (user.rol in ['ADMIN', 'JEFE'] or user.is_superuser)
+    """Verifica si el usuario es ADMIN o superuser"""
+    return user.is_authenticated and (user.rol == 'ADMIN' or user.is_superuser)
 
 @login_required
 @user_passes_test(es_admin, login_url='home')
