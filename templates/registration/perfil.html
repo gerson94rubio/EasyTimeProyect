@@ -2,42 +2,52 @@
 {% block content %}
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-8 col-lg-6">
-            <div class="card shadow-lg border-0 rounded-4 overflow-hidden bg-body-tertiary">
-                <div class="card-header bg-dark py-3 border-0">
-                    <h4 class="mb-0 fw-bold text-white text-center">Mi Perfil en EasyTime</h4>
-                </div>
-                
-                <div class="card-body p-4">
-                    <div class="mb-4 p-3 bg-primary bg-opacity-10 rounded-4 border-start border-primary border-4">
-                        <p class="mb-1 custom-text-dim small text-uppercase fw-bold">Datos de cuenta</p>
-                        <p class="mb-2"><strong class="custom-text-bright">Usuario:</strong> <span class="custom-text-dim">{{ user.username }}</span></p>
-                        <p class="mb-2"><strong class="custom-text-bright">Correo:</strong> <span class="custom-text-dim">{{ user.email }}</span></p>
-                        <p class="mb-0"><strong class="custom-text-bright">Identificación:</strong> <span class="custom-text-dim">{{ user.tipo_documento }} - {{ user.identificacion }}</span></p>
-                        
-                        <!-- ✅ AGREGA ESTO: Campo de Rol -->
-                        <p><strong>Rol:</strong> 
-                        {% if user.rol == 'ADMIN' %}
-                        <span class="badge bg-danger">Administrador</span>
-                        {% elif user.rol == 'JEFE' %}
-                        <span class="badge bg-warning text-dark">Jefe de Patio</span>
-                        {% else %}
-                        <span class="badge bg-info">Cliente</span>
-                        {% endif %}
-                        </p>
-               </div>
+        <div class="col-md-8 col-lg-5"> <div class="card shadow border-0 rounded-4 bg-white">
+                <div class="card-body p-5"> <div class="text-center mb-4">
+                        <div class="mb-3">
+                             <i class="bi bi-person-circle text-primary" style="font-size: 4rem;"></i>
+                        </div>
+                        <h2 class="fw-bold text-dark">Mi Perfil</h2>
                     </div>
 
-                    <hr class="border-secondary opacity-25 my-4">
+                    <div class="mb-4">
+                        <div class="p-3 border rounded-3 bg-light">
+                            <p class="mb-1 small text-muted text-uppercase fw-bold" style="letter-spacing: 1px;">Datos de cuenta</p>
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="text-secondary">Usuario:</span>
+                                <span class="fw-bold text-dark">{{ user.username }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="text-secondary">Correo:</span>
+                                <span class="fw-bold text-dark text-truncate ms-2">{{ user.email }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-secondary">Identificación:</span>
+                                <span class="fw-bold text-dark">{{ user.tipo_documento }} - {{ user.identificacion }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-secondary">Rol:</span>
+                                {% if user.rol == 'ADMIN' %}
+                                <span class="badge rounded-pill bg-danger">Administrador</span>
+                                {% elif user.rol == 'JEFE' %}
+                                <span class="badge rounded-pill bg-warning text-dark">Jefe de Patio</span>
+                                {% else %}
+                                <span class="badge rounded-pill bg-info text-white">Cliente</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4 opacity-25">
 
                     <form method="post" id="form-perfil">
                         {% csrf_token %}
-                        <h5 class="mb-3 fw-bold custom-text-bright">Actualizar Información</h5>
+                        <h5 class="mb-3 fw-bold text-dark text-center">Actualizar Información</h5>
                         
-                        <div class="row g-3 text-start">
+                        <div class="row g-3">
                             {% for field in form %}
-                                <div class="col-12 mb-2">
-                                    <label class="form-label fw-bold small custom-text-bright">{{ field.label }}</label>
+                                <div class="col-12">
+                                    <label class="form-label fw-bold small text-secondary">{{ field.label }}</label>
                                     <div class="django-field-wrapper">
                                         {{ field }}
                                     </div>
@@ -48,8 +58,8 @@
                             {% endfor %}
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill fw-bold shadow-sm mt-4">
-                            <i class="bi bi-save me-2"></i>Guardar Cambios
+                        <button type="submit" class="btn btn-primary btn-lg w-100 rounded-3 fw-bold mt-4 shadow-sm py-3">
+                            Entrar y Guardar
                         </button>
                     </form>
                 </div>
@@ -59,34 +69,44 @@
 </div>
 
 <style>
-    /* Colores Adaptables (Blanco Hueso para Dark Mode) */
-    [data-bs-theme="dark"] .custom-text-bright { color: #E2E8F0; }
-    [data-bs-theme="dark"] .custom-text-dim { color: #94A3B8; }
-    [data-bs-theme="light"] .custom-text-bright { color: #212529; }
-    [data-bs-theme="light"] .custom-text-dim { color: #6c757d; }
+    /* Estilos para imitar fielmente el login de la imagen 2 */
+    .card {
+        border-radius: 20px !important;
+    }
 
-    /* ESTILO UNIFICADO DE INPUTS (Mismo que Login/Agendar) */
     input, select, textarea {
         display: block;
         width: 100% !important;
-        padding: 12px 15px !important;
-        font-size: 1rem;
-        border-radius: 12px !important;
-        border: 1px solid #ced4da !important;
-        background-color: var(--bs-body-bg) !important;
-        color: var(--bs-body-color) !important;
-        transition: all 0.3s ease;
+        padding: 14px 18px !important; /* Más alto como el login */
+        font-size: 0.95rem;
+        border-radius: 10px !important;
+        border: 1px solid #e0e0e0 !important;
+        background-color: #fcfcfc !important;
+        color: #333 !important;
+        transition: all 0.2s ease-in-out;
     }
 
-    input:focus, select:focus {
-        border-color: #0d6efd !important;
-        outline: 0;
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15) !important;
+    input:focus {
+        border-color: #007bff !important;
+        background-color: #fff !important;
+        box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.1) !important;
+        outline: none;
     }
 
-    /* Ajuste para el cuadro informativo en modo oscuro */
-    .bg-primary.bg-opacity-10 {
-        background-color: rgba(13, 110, 253, 0.1) !important;
+    .btn-primary {
+        background-color: #007bff !important;
+        border: none !important;
+        transition: transform 0.1s ease;
+    }
+
+    .btn-primary:active {
+        transform: scale(0.98);
+    }
+
+    /* Ajuste para que el icono se parezca al del login */
+    .bi-person-circle {
+        color: #007bff;
+        opacity: 0.9;
     }
 </style>
 {% endblock %}
