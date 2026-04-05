@@ -44,14 +44,18 @@ class User(AbstractUser):
         return f"{self.username} - {self.get_rol_display()}"
     
     def save(self, *args, **kwargs):
-        # LOGICA DE SEGURIDAD:
+        # NOTA PARA EL EQUIPO: Se desactiva la asignación automática de is_staff 
+        # para permitir la gestión manual de roles y permisos desde el panel de administración.
+    
+        """
         # Solo permitimos 'is_staff' (acceso al panel admin) si el rol es ADMIN o JEFE.
-        # También verificamos si ya es superusuario para no quitarle el permiso por accidente.
-        if self.rol in ['ADMIN', 'JEFE'] or self.is_superuser:
+         # También verificamos si ya es superusuario para no quitarle el permiso por accidente.
+         if self.rol in ['ADMIN', 'JEFE'] or self.is_superuser:
             self.is_staff = True
         else:
-            # Los CLIENTES siempre tendrán is_staff en False, bloqueando su acceso al admin.
-            self.is_staff = False
-        
-        # Guardamos los cambios en la base de datos
+        # Los CLIENTES siempre tendrán is_staff en False, bloqueando su acceso al admin.
+        self.is_staff = False
+        """
+    
+    # Guardamos los cambios en la base de datos
         super().save(*args, **kwargs)
