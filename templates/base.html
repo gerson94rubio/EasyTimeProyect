@@ -74,25 +74,25 @@
                 <!--<li class="nav-item"><a class="nav-link text-white" href="{% url 'catalogo_productos' %}">Productos</a></li> -->
             </ul>
 
-        <!--Botón panel administración si es superusuario-->
+        <!--Botón panel administración si es staff (desarrollador)-->
             <ul class="navbar-nav ms-auto align-items-center"> <!--Así logré que se centrara en el navbar-->
               
-                <!-- {% if user.is_superuser %}
+                {% if user.is_staff %}
                  <li class="nav-item">
                      <a class="btn btn-warning rounded-pill px-3 shadow-sm me-2" href="{% url 'admin:index' %}" target="_blank">
                         <i class="bi bi-shield-lock-fill me-1"></i> Panel Administración
                     </a>
                 </li>
+                {% endif %}
+
+                <!--Apagado para logica, todo usuario staff (desarrollador) puede ver el botón de administración-->
+                <!--{% if user.is_authenticated and user.username == 'gersonrubio' %}
+                <li class="nav-item">
+                    <a class="btn btn-warning rounded-pill px-3 shadow-sm me-2" href="{% url 'admin:index' %}">
+                        <i class="bi bi-shield-lock-fill me-1"></i> Panel Administración
+                    </a>
+                </li>
                 {% endif %} -->
-
-{% if user.is_authenticated and user.username == 'gersonrubio' %}
-<li class="nav-item">
-<a class="btn btn-warning rounded-pill px-3 shadow-sm me-2" href="{% url 'admin:index' %}">
-<i class="bi bi-shield-lock-fill me-1"></i> Panel Administración
-</a>
-</li>
-{% endif %}
-
 
             <div class="d-flex align-items-center">
                 <button class="btn btn-link text-white me-2 p-1" id="themeBtn" title="Cambiar modo">
@@ -109,8 +109,8 @@
                         {% endif %}
                     </a>
 
-                <!-- 🔔 NOTIFICACIONES -->
-            {% if user.is_staff or user.rol == 'ADMIN' or user.rol == 'JEFE' %}
+            <!-- 🔔 NOTIFICACIONES -->
+            {% if user.rol == 'ADMIN' or user.rol == 'JEFE' %}
             <a href="#" class="btn btn-link text-white me-3 position-relative p-1 shadow-none" id="noti-link" data-bs-toggle="dropdown">
                 <i class="bi bi-bell fs-4"></i>
             <span id="badge-notificaciones" class="position-absolute top-0 start-100 translate-middle badge rounded-circle bg-danger border border-light cart-badge" style="display: none;">
@@ -120,16 +120,16 @@
 
             <!-- Dropdown de notificaciones -->
             <ul class="dropdown-menu dropdown-menu-end shadow border-0" id="lista-notificaciones" style="min-width: 300px; max-height: 400px; overflow-y: auto;">
-            <li><h6 class="dropdown-header py-2">🔔 Notificaciones</h6></li>
-            <li><hr class="dropdown-divider"></li>
-            <li id="sin-notificaciones">
-            <a class="dropdown-item text-center text-muted py-3" href="#">
-            <i class="bi bi-check-circle"></i> No hay notificaciones nuevas
-            {% endif %}
-        </a>
-    </li>
-</ul>
-<!-- FIN NOTIFICACIONES -->
+                <li><h6 class="dropdown-header py-2">🔔 Notificaciones</h6></li>
+                <li><hr class="dropdown-divider"></li>
+                <li id="sin-notificaciones">
+                    <a class="dropdown-item text-center text-muted py-3" href="#">
+                        <i class="bi bi-check-circle"></i> No hay notificaciones nuevas
+                        {% endif %}
+                    </a>
+                </li>
+            </ul>
+            <!-- FIN NOTIFICACIONES -->
 
 
                     <div class="dropdown">
