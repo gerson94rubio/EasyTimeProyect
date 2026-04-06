@@ -5,7 +5,8 @@ app_name = 'agendamiento'
 
 urlpatterns = [
     path('api/notificaciones/', views.obtener_notificaciones, name='obtener_notificaciones'),
-    path('notificacion/<int:notificacion_id>/marcar-leida/', views.marcar_leida, name='marcar_leida'),
+    path('notificaciones/marcar-todas/', views.marcar_todas_leidas, name='marcar_todas_leidas'),
     path('notificacion/<int:notificacion_id>/detalle/', views.ver_notificacion_detalle, name='ver_notificacion_detalle'),
-    path('notificaciones/', views.ver_todas_las_notificaciones, name='ver_todas_las_notificaciones'),
+    path('notificaciones/todas/', views.ver_todas_las_notificaciones, name='ver_todas_las_notificaciones'),
+    path('cita/<int:cita_id>/detalle/', views.detalle_cita, name='detalle_cita'),
 ]

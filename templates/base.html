@@ -13,11 +13,23 @@
     
     <style>
         :root { 
-            --primary-color: white; 
+            --primary-color: #f8f9fa;
             --blue: #459fe9;
             --yellow: #e0a609;
+            --blue-btn: #636e72;
+            --green: #27ae60;
+            --red-light: #eb4d4b;
         }
-        
+        .btn-primary {
+            background-color: var(--blue) !important;
+            border-color: var(--blue) !important;
+            color: white !important; /* Texto blanco para que resalte */
+        }
+        .btn-warning {
+            background-color: var(--yellow) !important;
+            border-color: var(--yellow) !important;
+            color: var(--primary-color) !important;
+        }
         body { 
             display: flex; 
             flex-direction: column; 
@@ -55,6 +67,8 @@
             transition: transform 0.3s ease;
         }
         #themeBtn:hover { transform: scale(1.1); }
+
+        
     </style>
 </head>
 <body>
@@ -153,7 +167,7 @@
                     </div>
                 {% else %}
                     <a href="{% url 'login' %}" class="btn btn-outline-light me-2">Iniciar Sesión</a>
-                    <a href="{% url 'registro' %}" class="btn btn-primary">Registrarse</a>
+                    <a href="{% url 'registro' %}" class="btn btn-warning fw-bold px-3 shadow-sm">Registrarse</a>
                 {% endif %}
             </div>
         </div>

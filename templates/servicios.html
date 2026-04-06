@@ -6,7 +6,7 @@
 <div class="container mt-5">
     <div class="text-center mb-5">
         <h2 class="fw-bold custom-text-bright">Nuestros Servicios de Lavado</h2>
-        <p class="custom-text-dim">Selecciona el tratamiento ideal para tu vehículo.</p>
+        <p class="custom-text-dim">Selecciona el tratamiento ideal para tu vehículo en EasyTime.</p>
     </div>
 
     <div class="row g-4">
@@ -51,10 +51,39 @@
         </div>
         {% endfor %}
     </div>
-</div>
 
-<div class="text-center mt-5 mb-4">
-        <hr class="text-muted opacity-25"> <!-- Una línea divisoria sutil -->
+    {% if servicios.has_other_pages %}
+    <nav aria-label="Navegación de servicios" class="mt-5">
+        <ul class="pagination justify-content-center">
+            {% if servicios.has_previous %}
+                <li class="page-item">
+                    <a class="page-link rounded-pill shadow-sm mx-1 border-0" href="?page=1" title="Primera página">&laquo;</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link rounded-pill shadow-sm mx-1 border-0" href="?page={{ servicios.previous_page_number }}">Anterior</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item disabled">
+                <span class="page-link rounded-pill mx-2 border-0 bg-transparent custom-text-bright fw-bold">
+                    Página {{ servicios.number }} de {{ servicios.paginator.num_pages }}
+                </span>
+            </li>
+
+            {% if servicios.has_next %}
+                <li class="page-item">
+                    <a class="page-link rounded-pill shadow-sm mx-1 border-0" href="?page={{ servicios.next_page_number }}">Siguiente</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link rounded-pill shadow-sm mx-1 border-0" href="?page={{ servicios.paginator.num_pages }}" title="Última página">&raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+    <div class="text-center mt-5 mb-4">
+        <hr class="text-muted opacity-25">
         <a href="{% url 'home' %}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
             <i class="bi bi-arrow-left me-2"></i>Volver al Inicio
         </a>
@@ -62,12 +91,31 @@
 </div>
 
 <style>
-    /* VARIABLES DE COLOR ADAPTABLES (Blanco Hueso para Dark Mode) */
-    [data-bs-theme="dark"] .custom-text-bright { color: #E2E8F0; }
-    [data-bs-theme="dark"] .custom-text-dim { color: #94A3B8; }
-    [data-bs-theme="light"] .custom-text-bright { color: #212529; }
-    [data-bs-theme="light"] .custom-text-dim { color: #6c757d; }
+    /* Estilos de Paginación */
+    .page-link {
+        color: #0d6efd;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .page-link:hover {
+        background-color: #0d6efd !important;
+        color: white !important;
+        transform: translateY(-2px);
+    }
 
+    [data-bs-theme="dark"] .page-link {
+        background-color: #1e293b;
+        color: #cbd5e1;
+    }
+
+    /* Variables de Texto Adaptables */
+    [data-bs-theme="dark"] .custom-text-bright { color: #F8FAFC; }
+    [data-bs-theme="dark"] .custom-text-dim { color: #94A3B8; }
+    [data-bs-theme="light"] .custom-text-bright { color: #1E293B; }
+    [data-bs-theme="light"] .custom-text-dim { color: #64748B; }
+
+    /* Efectos de la Tarjeta */
     .card { 
         transition: transform 0.3s ease, box-shadow 0.3s ease; 
         border: 1px solid transparent !important;
@@ -78,8 +126,8 @@
     }
 
     .card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 12px 24px rgba(0,0,0,0.15) !important;
+        transform: translateY(-8px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
     }
 </style>
 {% endblock %}

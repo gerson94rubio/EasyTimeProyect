@@ -5,7 +5,7 @@
     <div class="col-md-6 col-lg-4">
         <div class="card shadow-lg border-0 rounded-4 bg-body-tertiary">
             <div class="card-body p-5 text-center">
-                <i class="bi bi-person-circle display-1 text-primary mb-4"></i>
+                <i class="bi bi-person-circle display-1 mb-4" style="color: var(--blue);"></i>
                 <h2 class="fw-bold mb-4 custom-text-bright">Iniciar Sesión</h2>
                 
                 <div id="simulacion-error" class="alert alert-warning small mb-3 shadow-sm" style="display: none; border-radius: 12px;">
@@ -15,6 +15,15 @@
                     <i class="bi bi-send-check-fill me-2"></i> Enlace enviado a: <strong id="user-display"></strong>
                 </div>
 
+                {% if form.errors or form.non_field_errors %}
+                    <div class="alert shadow-sm border-0 mb-4 animate__animated animate__shakeX" style="background-color: var(--yellow); color: white; border-radius: 12px; font-size: 0.9rem;">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-exclamation-circle-fill me-2 fs-5"></i>
+                            <div> Usuario o contraseña incorrectos.</div>
+                        </div>
+                    </div>
+                {% endif %}
+                
                 <form method="post" class="text-start" id="loginForm">
                     {% csrf_token %}
                     
@@ -39,18 +48,18 @@
                             <label class="form-check-label small custom-text-dim" for="rememberMe">Recordarme</label>
                         </div>
                         {# Botón de simulación con ID único #}
-                        <button type="button" id="btn-recuperar-pass" class="btn btn-link small p-0 text-decoration-none fw-bold text-primary border-0 bg-transparent">
+                        <button type="button" id="btn-recuperar-pass" class="btn btn-link small p-0 text-decoration-none fw-bold text-primary border-0 bg-transparent" style="color: var(--blue) !important;">
                             ¿Olvidaste tu clave?
                         </button>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill fw-bold shadow-sm">
+                    <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill fw-bold shadow-sm" >
                         Entrar
                     </button>
                 </form>
                 
                 <hr class="my-4">
-                <p class="small custom-text-dim">¿No tienes cuenta? <a href="{% url 'registro' %}" class="fw-bold">Regístrate aquí</a></p>
+                <p class="small custom-text-dim">¿No tienes cuenta? <a href="{% url 'registro' %}" class="fw-bold" style="color: var(--blue) !important;">Regístrate aquí</a></p>
             </div>
         </div>
     </div>
@@ -79,11 +88,23 @@
 </script>
 
 <style>
-    /* Estilos unificados con EasyTime */
+    /* Estilos unificados */
     [data-bs-theme="dark"] .custom-text-bright { color: #E2E8F0; }
     [data-bs-theme="dark"] .custom-text-dim { color: #94A3B8; }
     [data-bs-theme="light"] .custom-text-bright { color: #212529; }
     [data-bs-theme="light"] .custom-text-dim { color: #6c757d; }
+
+    /* Forzar el azul en el botón de Entrar */
+    .btn-primary {
+        background-color: var(--blue) !important;
+        border-color: var(--blue) !important;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        filter: brightness(90%);
+        transform: translateY(-1px);
+    }
 
     .custom-input { 
         width: 100%; 
@@ -95,10 +116,17 @@
         display: block;
     }
 
+    /* El resplandor al escribir ahora será de tu azul */
     .custom-input:focus {
-        border-color: var(--blue);
-        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+        border-color: var(--blue) !important;
+        box-shadow: 0 0 0 0.25rem rgba(69, 159, 233, 0.2) !important;
         outline: none;
+    }
+    
+    /* Estilo para el checkbox cuando está activo */
+    .form-check-input:checked {
+        background-color: var(--blue);
+        border-color: var(--blue);
     }
 </style>
 {% endblock %}
