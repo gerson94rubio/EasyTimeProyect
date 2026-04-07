@@ -93,23 +93,19 @@ def marcar_leida(request, notificacion_id):
 
 @login_required
 def ver_notificacion_detalle(request, notificacion_id):
-    """Muestra detalles y marca como leída al abrir"""
-    es_admin_jefe = getattr(request.user, 'rol', None) in ['ADMIN', 'JEFE']
-    
-    if not (request.user.is_staff or es_admin_jefe):
-        messages.error(request, "No tienes permisos para ver esta notificación")
-        return redirect('home')
-    
-    notificacion = get_object_or_404(Notificacion, id=notificacion_id, usuario=request.user)
-    notificacion.leida = True
-    notificacion.save()
-    
-    # Obtenemos la última cita relacionada para mostrar contexto
-    cita = Cita.objects.order_by('-creado_el').first() 
-    
+    """
+    CAMBIO REALIZADO: Ahora carga el template azul (notificacion_detalle.html) 
+    en lugar de saltar directo a la gestión.
+    """
+    noti = get_object_or_404(Notificacion, id=notificacion_id, usuario=request.user)
+
+    noti.leida = True
+    noti.save()
+
+    # Si la notificación tiene cita, la pasamos para que el diseño azul no salga vacío
     return render(request, 'notificacion_detalle.html', {
-        'notificacion': notificacion,
-        'cita': cita,
+        'notificacion': noti,
+        'cita': noti.cita
     })
 
 @login_required
@@ -123,3 +119,42 @@ def ver_todas_las_notificaciones(request):
     
     notificaciones = Notificacion.objects.filter(usuario=request.user).order_by('-fecha')[:50]
     return render(request, 'todas_las_notificaciones.html', {'notificaciones': notificaciones})
+
+@login_required
+def marcar_todas_leidas(request):
+    """CAMBIO REALIZADO: Añadido namespace 'agendamiento:' para evitar error amarillo"""
+    rol_usuario = getattr(request.user, 'rol', None)
+    
+    if rol_usuario in ['ADMIN', 'JEFE']:
+        Notificacion.objects.filter(usuario=request.user, leida=False).update(leida=True)
+        messages.success(request, "Todas las notificaciones marcadas como leídas.")
+    else:
+        messages.error(request, "No tienes permisos de administrador para esta acción.")
+        
+    return redirect('agendamiento:ver_todas_las_notificaciones')
+
+# ===================================================================
+# GESTIÓN Y DETALLES DE CITAS
+# ===================================================================
+
+@login_required
+def detalle_cita(request, cita_id):
+    """
+    CAMBIO REALIZADO: Añadido namespace 'agendamiento:' en el redirect 
+    para recargar el diseño claro correctamente.
+    """
+    # Buscamos la cita por su ID
+    cita = get_object_or_404(Cita, id=cita_id)
+    
+    # Si el Administrador cambia el estado en el formulario del detalle
+    if request.method == 'POST' and request.user.rol in ['ADMIN', 'JEFE']:
+        nuevo_estado = request.POST.get('nuevo_estado')
+        if nuevo_estado:
+            cita.estado = nuevo_estado
+            cita.save()
+            # Mensaje de éxito y recarga la página con el namespace
+            messages.success(request, f"Estado actualizado a {cita.get_estado_display()}")
+            return redirect('agendamiento:detalle_cita', cita_id=cita.id)
+
+    # Renderizamos tu nuevo template de diseño claro
+    return render(request, 'detalle_cita.html', {'cita': cita})

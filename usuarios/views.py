@@ -9,18 +9,20 @@ from django.http import HttpResponse
 from django.db.models import Count
 from django.utils import timezone
 
-# 🔹 Formularios y Modelos
+# Formularios y Modelos
 from .forms import RegistroClienteForm, EditarPerfilForm, UsuarioCreationForm, UsuarioUpdateForm
 from .models import User
 from agendamiento.models import Cita, Servicio 
 
-# 🔹 Generación de Reportes
+# Generación de Reportes
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.platypus import Table, TableStyle
 import openpyxl
 from openpyxl.styles import Font, Alignment, PatternFill
+# Barra busqueda avanzada
+from django.db.models import Q
 
 # ===================================================================
 # PERMISOS Y UTILIDADES
@@ -36,33 +38,30 @@ def es_admin(user):
 
 def home(request):
     """
-    Si es ADMIN: Carga datos del Dashboard para mostrar en el Home.
-    Si es CLIENTE/ANÓNIMO: Muestra el Home normal de EasyTime.
+    Si es ADMIN/JEFE: Dashboard con Gestión de Citas (DataTable).
+    Si es CLIENTE/ANÓNIMO: Home normal.
     """
     if es_admin(request.user):
-        # Recolección de estadísticas para el Dashboard en el Home
+        # 1. Estadísticas
         total_usuarios = User.objects.count()
         total_citas = Cita.objects.count()
-        
-        # Citas agendadas para el día de hoy
         hoy = timezone.now().date()
         citas_hoy = Cita.objects.filter(fecha_hora__date=hoy).count()
         
-        # Listas para las tablas del tablero
+        citas_gestion = Cita.objects.all().order_by('-fecha_hora') # Lista orden por fechas, todas las citas
+        # 3. Listas cortas para widgets laterales
         ultimos_usuarios = User.objects.all().order_by('-id')[:5]
-        proximas_citas = Cita.objects.all().order_by('fecha_hora')[:5]
 
         context = {
             'total_usuarios': total_usuarios,
             'total_citas': total_citas,
             'citas_hoy': citas_hoy,
+            'citas_gestion': citas_gestion,  # Para la lista de citas recientes
             'ultimos_usuarios': ultimos_usuarios,
-            'proximas_citas': proximas_citas,
-            'es_admin_dashboard': True  # Bandera para el template
+            'es_admin_dashboard': True  
         }
         return render(request, 'home.html', context)
     
-    # Vista estándar para clientes
     return render(request, 'home.html')
 
 # ===================================================================
@@ -101,15 +100,27 @@ def mi_perfil(request):
 # ===================================================================
 # ADMINISTRACIÓN DE USUARIOS (CRUD)
 # ===================================================================
-
+# Busqueda por filtros: username, nombre, apellido, email, identificacion
 @login_required
 @user_passes_test(es_admin, login_url='home')
 def lista_usuarios(request):
+    busqueda = request.GET.get('search')
     usuarios_list = User.objects.all().order_by('id') 
+    if busqueda:
+        usuarios_list = usuarios_list.filter(
+            Q(username__icontains=busqueda) | 
+            Q(first_name__icontains=busqueda) | 
+            Q(last_name__icontains=busqueda) |
+            Q(email__icontains=busqueda) |
+            Q(identificacion__icontains=busqueda)
+        ).distinct()
     paginator = Paginator(usuarios_list, 10) 
     page_number = request.GET.get('page')
     usuarios = paginator.get_page(page_number)
-    return render(request, 'usuarios/lista_usuarios.html', {'usuarios': usuarios})
+    return render(request, 'usuarios/lista_usuarios.html', {
+        'usuarios': usuarios, 
+        'busqueda': busqueda
+    })
 
 @login_required
 @user_passes_test(es_admin, login_url='home')

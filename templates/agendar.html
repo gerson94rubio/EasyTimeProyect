@@ -49,12 +49,11 @@
                             <i class="bi bi-arrow-left me-1"></i>Cambiar servicio
                         </a>
                         <div class="text-center mt-5 mb-4">
-        <hr class="text-muted opacity-25"> <!-- Una línea divisoria sutil -->
-        <a href="{% url 'home' %}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
-            <i class="bi bi-arrow-left me-2"></i>Volver al Inicio
-        </a>
-    </div>
-</div>
+                        <hr class="text-muted opacity-25"> <!-- Una línea divisoria sutil -->
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm">
+                                <i class="bi bi-arrow-left me-2"></i>Volver al Inicio
+                            </a>
+                        </div>  
                     </div>
                 </form>
             </div>
@@ -67,26 +66,29 @@
         const selectServicio = document.querySelector('select[name="servicio"]');
         const displayPrecio = document.getElementById('precio-resumen');
 
-        // Diccionario de precios generado desde Python/Django
         const listaPrecios = {
             {% for s in form.fields.servicio.queryset %}
-            "{{ s.id }}": "{{ s.precio|floatformat:0|intcomma }}",
+                "{{ s.id }}": "{{ s.precio|floatformat:0 }}"{% if not forloop.last %},{% endif %}
             {% endfor %}
         };
 
         function actualizarPrecio() {
+            if (!selectServicio) return;
             const idSeleccionado = selectServicio.value;
-            const precioFormateado = listaPrecios[idSeleccionado] || "0";
-            displayPrecio.innerText = '$' + precioFormateado;
+            // Obtenemos el precio y le añadimos puntos de miles para que se vea bien
+            const precioRaw = listaPrecios[idSeleccionado] || "0";
+            const precioConPuntos = precioRaw.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            
+            displayPrecio.innerText = '$' + precioConPuntos;
         }
 
         if (selectServicio) {
             selectServicio.addEventListener('change', actualizarPrecio);
-            // Ejecución inicial por si el formulario ya tiene un valor cargado
             actualizarPrecio();
         }
     });
 </script>
+
 
 <style>
     /* VARIABLES DE COLOR (Blanco Hueso para Modo Oscuro) */
