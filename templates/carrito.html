@@ -28,7 +28,7 @@
                                 <input type="checkbox" name="items_seleccionados" value="{{ item.id }}" 
                                        class="form-check-input item-checkbox custom-check" 
                                        {% if item.producto.stock_actual > 0 %}checked{% else %}disabled{% endif %}
-                                       data-subtotal="{{ item.obtener_subtotal|safe }}"> 
+                                       data-subtotal="{{ item.obtener_subtotal|floatformat:2 }}"> 
                             </td>
                             <td>
                                 <div class="d-flex align-items-center">
@@ -121,9 +121,8 @@
 
             checkboxes.forEach(cb => {
                 if (cb.checked && !cb.disabled) {
-                    let valorRaw = cb.dataset.subtotal || "0";
-                    let valorLimpio = valorRaw.replace(/[$. ]/g, '').replace(',', '.');
-                    let valorNum = parseFloat(valorLimpio);
+                    // Se usa parseFloat directamente sobre el valor numérico de floatformat
+                    let valorNum = parseFloat(cb.dataset.subtotal);
                     
                     if (!isNaN(valorNum)) {
                         nuevoTotal += valorNum;
@@ -152,39 +151,5 @@
     /* VARIABLES DE COLOR ADAPTABLES */
     [data-bs-theme="dark"] .custom-text-bright { color: #E2E8F0; }
     [data-bs-theme="dark"] .custom-text-dim { color: #94A3B8; }
-    [data-bs-theme="light"] .custom-text-bright { color: #212529; }
-    [data-bs-theme="light"] .custom-text-dim { color: #6c757d; }
-
-    /* Estilo de Cabecera de Tabla */
-    .custom-table-header {
-        background-color: rgba(13, 110, 253, 0.05);
-    }
-    [data-bs-theme="dark"] .custom-table-header {
-        background-color: #1e293b;
-        color: #E2E8F0;
-    }
-
-    /* Animación de pulso */
-    .animate-pulse-small {
-        animation: pulse-yellow-small 2s infinite;
-    }
-    @keyframes pulse-yellow-small {
-        0% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.4); }
-        70% { box-shadow: 0 0 0 5px rgba(255, 193, 7, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(255, 193, 7, 0); }
-    }
-
-    /* Checkbox personalizado */
-    .custom-check:checked {
-        background-color: #0d6efd;
-        border-color: #0d6efd;
-    }
-
-    /* Quitar bordes molestos en tablas dark */
-    [data-bs-theme="dark"] .table {
-        --bs-table-bg: transparent;
-        --bs-table-color: #94A3B8;
-        border-color: #334155;
-    }
 </style>
 {% endblock %}

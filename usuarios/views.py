@@ -112,7 +112,9 @@ def lista_usuarios(request):
             Q(first_name__icontains=busqueda) | 
             Q(last_name__icontains=busqueda) |
             Q(email__icontains=busqueda) |
-            Q(identificacion__icontains=busqueda)
+            Q(identificacion__icontains=busqueda) |
+            Q(telefono__icontains=busqueda) |
+            Q(rol__icontains=busqueda)
         ).distinct()
     paginator = Paginator(usuarios_list, 10) 
     page_number = request.GET.get('page')
