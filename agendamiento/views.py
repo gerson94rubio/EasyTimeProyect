@@ -6,6 +6,8 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator # Importante para el catálogo
 from .models import Cita, Servicio, Notificacion 
 from .forms import CitaForm, ServicioForm  # ✅ CORRECCIÓN: Se importó ServicioForm
+from rest_framework import viewsets
+from .serializers import CitaSerializer
 
 # ===================================================================
 # CATÁLOGO Y AGENDAMIENTO
@@ -182,3 +184,8 @@ def crear_servicio(request):
         form = ServicioForm()
         
     return render(request, 'crear_servicio.html', {'form': form})
+
+#Vieset para el endpoint
+class CitaViewSet(viewsets.ModelViewSet):
+    queryset = Cita.objects.all()
+    serializer_class = CitaSerializer

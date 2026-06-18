@@ -10,6 +10,16 @@ from agendamiento import views as agend_views
 from inventario import views as inv_views
 from pqrs import views as pqrs_views
 from usuarios import views as usuarios_views
+from rest_framework import routers
+from inventario.views import ProductoViewSet
+from usuarios.views import UserViewSet
+from agendamiento.views import CitaViewSet
+
+
+router = routers.DefaultRouter()
+router.register(r'productos', ProductoViewSet)
+router.register(r'usuarios', UserViewSet)
+router.register(r'citas', CitaViewSet)
 
 urlpatterns = [
     # Administración y Base
@@ -57,6 +67,9 @@ urlpatterns = [
 
     # Otros módulos
     path('agendamiento/', include('agendamiento.urls')),
+
+    # Endpoits
+    path('api/', include(router.urls)),
 ]
 
 # Configuración para archivos multimedia

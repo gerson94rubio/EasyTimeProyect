@@ -24,6 +24,10 @@ from openpyxl.styles import Font, Alignment, PatternFill
 # Barra busqueda avanzada
 from django.db.models import Q
 
+# Para los endpoints
+from rest_framework import viewsets
+from .serializers import UserSerializer
+
 # ===================================================================
 # PERMISOS Y UTILIDADES
 # ===================================================================
@@ -257,3 +261,8 @@ def generar_excel_usuarios(request):
     response['Content-Disposition'] = f'attachment; filename="{nombre_f}"'
     wb.save(response)
     return response
+
+#aqui va su respectivo viewset
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer

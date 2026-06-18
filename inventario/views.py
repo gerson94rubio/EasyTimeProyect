@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Producto, Venta, DetalleVenta
 from django.db import transaction
+from rest_framework import viewsets
+from .serializers import ProductoSerializer
 
 # Catálogo de EasyTime
 def catalogo_productos(request):
@@ -113,3 +115,8 @@ def eliminar_del_carrito(request, item_id):
     item.delete()
     messages.warning(request, "Producto eliminado.")
     return redirect('ver_carrito')
+
+#aqui va su respectivo viewset
+class ProductoViewSet(viewsets.ModelViewSet):
+    queryset = Producto.objects.all()
+    serializer_class = ProductoSerializer 

@@ -17,7 +17,7 @@ class Producto(models.Model):
 
     def __str__(self):
         return f"{self.nombre} (${self.precio_venta})"
-
+    
 class EntradaInventario(models.Model):
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     fecha_registro = models.DateTimeField(auto_now_add=True)
